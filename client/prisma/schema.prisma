@@ -1,0 +1,706 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model FacultyPersonalDetails {
+  id                         Int       @id @default(autoincrement())
+  facultyId                  String    @unique
+  qualification              String?
+  photo                      String?
+  title                      String?
+  firstName                  String?
+  middleName                 String?
+  lastName                   String?
+  emailId                    String?
+  contactNo                  String?
+  alternateContactNo         String?
+  emergencyContactNo         String?
+  adharNo                    String?
+  panNo                      String?
+  dob                        DateTime?
+  gender                     String?
+  nationality                String?
+  firstAddressLine1          String?
+  firstAddressLine2          String?
+  firstAddressLine3          String?
+  correspondenceAddressLine1 String?
+  correspondenceAddressLine2 String?
+  correspondenceAddressLine3 String?
+  religion                   String?
+  caste                      String?
+  category                   String?
+  motherTongue               String?
+  speciallyChallenged        Boolean?
+  remarks                    String?
+  languages                  Json?
+  bankName                   String?
+  accountNo                  String?
+  accountName                String?
+  accountType                String?
+  branch                     String?
+  ifsc                       String?
+  pfNumber                   String?
+  uanNumber                  String?
+  pensionNumber              String?
+  motherName                 String?
+  fatherName                 String?
+  spouseName                 String?
+  children                   Json?
+}
+
+model FaccultyEducation {
+  id                  Int     @id @default(autoincrement())
+  facultyId           String
+  Program             String?
+  usnSsn              String?
+  schoolCollege       String?
+  specialization      String?
+  mediumOfInstruction String?
+  passClass           String?
+}
+
+model FacultyAcademicDetails {
+  id                   Int                         @id @default(autoincrement())
+  employeeId           String                      @unique
+  facultyId            String                      @unique
+  qualification        String
+  department           String
+  level                String
+  designation          String
+  responsibilities     AddtionalResponsibility[]
+  awardsandrecognition AwardAndRecognition[]
+  eventsAttended       EventAttended[]
+  EventOrganized       EventOrganized[]
+  extracurriculars     Extracurricular[]
+  industryExperience   IndustryExperience[]
+  invitedTalks         InvitedTalk[]
+  outreachActivities   OutreachActivity[]
+  previousExperience   PreviousTeachingExperience?
+  researchExperience   ResearchExperience[]
+  specializations      Specialization[]
+}
+
+model PreviousTeachingExperience {
+  id            Int                    @id @default(autoincrement())
+  facultyId     String                 @unique
+  instituteName String
+  fromDate      DateTime
+  toDate        DateTime
+  faculty       FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "PreviousTeachingExperience_facultyId_fkey")
+}
+
+model IndustryExperience {
+  id           Int                    @id @default(autoincrement())
+  organization String
+  designation  String
+  fromDate     DateTime
+  toDate       DateTime
+  facultyId    String
+  faculty      FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "IndustryExperience_facultyId_fkey")
+}
+
+model ResearchExperience {
+  id           Int                    @id @default(autoincrement())
+  organization String
+  designation  String
+  fromDate     DateTime
+  toDate       DateTime
+  facultyId    String
+  faculty      FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "ResearchExperience_facultyId_fkey")
+}
+
+model Specialization {
+  id             Int                    @id @default(autoincrement())
+  subjectsTaught String
+  program        String
+  numberOfTimes  Int
+  facultyId      String
+  faculty        FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "Specialization_facultyId_fkey")
+}
+
+model EventAttended {
+  id             Int                    @id @default(autoincrement())
+  fromDate       DateTime
+  toDate         DateTime
+  organizer      String
+  venue          String
+  sponsor        String?
+  targetAudience String?
+  facultyId      String
+  nameofevent    String
+  typeofevent    String
+  faculty        FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "EventAttended_facultyId_fkey")
+}
+
+model EventOrganized {
+  id             Int                    @id @default(autoincrement())
+  typeofevent    String
+  nameofevent    String
+  fromDate       DateTime
+  toDate         DateTime
+  organizer      String
+  venue          String
+  sponsor        String?
+  targetAudience String?
+  facultyId      String
+  faculty        FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "EventAttended_facultyId_fkey")
+}
+
+model InvitedTalk {
+  id             Int                    @id @default(autoincrement())
+  eventType      String
+  fromDate       DateTime
+  toDate         DateTime
+  organizer      String
+  venue          String
+  targetAudience String
+  facultyId      String
+  topic          String
+  faculty        FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "InvitedTalk_facultyId_fkey")
+}
+
+model AddtionalResponsibility {
+  id                       Int                    @id @default(autoincrement())
+  additionalResponsibility String
+  level                    String
+  fromDate                 DateTime
+  toDate                   DateTime
+  facultyId                String
+  faculty                  FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "Responsibility_facultyId_fkey")
+}
+
+model Extracurricular {
+  id          Int                    @id @default(autoincrement())
+  eventType   String
+  eventTitle  String
+  fromDate    DateTime
+  toDate      DateTime
+  organizer   String
+  level       String
+  achievement String
+  facultyId   String
+  faculty     FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "Extracurricular_facultyId_fkey")
+}
+
+model OutreachActivity {
+  id        Int                    @id @default(autoincrement())
+  activity  String
+  role      String
+  fromDate  DateTime
+  toDate    DateTime
+  place     String
+  facultyId String
+  faculty   FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "OutreachActivity_facultyId_fkey")
+}
+
+model AwardAndRecognition {
+  id                     Int                    @id @default(autoincrement())
+  recognitionReceived    String
+  awardReceived          String
+  facultyId              String
+  FacultyAcademicDetails FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "Award_facultyId_fkey")
+}
+
+model FacultyResearchDetails {
+  id                   Int                    @id @default(autoincrement())
+  facultyId            String                 @unique
+  orcidId              String?                @unique
+  googleScholarId      String?                @unique
+  scopusId             String?                @unique
+  publonsId            String?                @unique
+  researchId           String?                @unique
+  conferenceandjournal ConferenceAndJournal[]
+  consultancy          Consultancy[]
+  patent               Patent[]
+  publications         Publication[]
+  researchGrant        ResearchGrant[]
+}
+
+model Patent {
+  id              String                 @id @default(uuid())
+  facultyId       String
+  areaOfResearch  String
+  patentPeriod    String
+  grantedYear     Int
+  author1         String
+  author2         String?
+  author3         String?
+  author4         String?
+  author5         String?
+  author6         String?
+  facultyResearch FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "Patent_facultyId_fkey")
+}
+
+model Publication {
+  id              Int                    @id @default(autoincrement())
+  publicationType String
+  name            String
+  volume          String?
+  pageNumber      String?
+  doi             String?
+  impactFactor    Float?
+  facultyId       String
+  faculty         FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "Publication_facultyId_fkey")
+}
+
+model ConferenceAndJournal {
+  id                Int                    @id @default(autoincrement())
+  facultyId         String
+  role              String
+  title             String
+  journalName       String
+  issueNo           String?
+  volume            String?
+  yearOfPublication Int
+  pageNo            String?
+  author1           String
+  author2           String?
+  author3           String?
+  author4           String?
+  publishedUnder    String?
+  impactFactor      Float?
+  quartile          String?
+  sponsor           String?
+  venue             String
+  fromDate          DateTime
+  toDate            DateTime
+  facultyResearch   FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "ConferenceAndJournal_facultyId_fkey")
+}
+
+model ResearchGrant {
+  id                      Int                    @id @default(autoincrement())
+  facultyId               String
+  facultyResearchId       String
+  name                    String
+  sanctionedDate          DateTime
+  projectPeriod           String
+  amountSanctioned        Float
+  fundedBy                String
+  principalInvestigator   String
+  coPrincipalInvestigator String?
+  phdAwarded              Boolean
+  status                  String
+  facultyResearch         FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "ResearchGrant_facultyId_fkey")
+}
+
+model Consultancy {
+  id                      String                 @id @default(uuid())
+  facultyId               String
+  facultyResearchId       String
+  faculty1                String
+  faculty2                String
+  faculty3                String
+  sanctionedDate          DateTime
+  projectPeriod           String
+  amount                  Float
+  principalInvestigator   String
+  coPrincipalInvestigator String?
+  status                  String
+  facultyResearch         FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+  @@index([facultyId], map: "Consultancy_facultyId_fkey")
+}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  facultyId String @unique
+  password  String @unique
+  role      String @default("faculty")
+  username  String
+}
+
+model Branch {
+  id         Int    @id @default(autoincrement())
+  branchName String
+  branchCode String
+}
+
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL")
+// }
+
+// model FacultyPersonalDetails {
+//   id                         Int       @id @default(autoincrement())
+//   faculty_id                 String    @unique
+//   qualification              String
+//   photo                      String
+//   title                      String
+//   faculty_name               String
+//   // firstName                  String?
+//   // middleName                 String?
+//   // lastName                   String?
+//   emailId                    String
+//   contactNo                  String
+//   alternateContactNo         String
+//   emergencyContactNo         String
+//   adharNo                    String
+//   panNo                      String
+//   dob                        DateTime
+//   gender                     String
+//   nationality                String
+//   firstAddressLine          String
+//   // firstAddressLine2          String?
+//   // firstAddressLine3          String?
+//   correspondenceAddressLine String
+//   // correspondenceAddressLine2 String?
+//   // correspondenceAddressLine3 String?
+//   religion                   String
+//   caste                      String
+//   category                   String
+//   motherTongue               String
+//   speciallyChallenged        Boolean
+//   remarks                    String
+//   languages                  Json
+//   bankName                   String
+//   accountNo                  String
+//   accountName                String
+//   accountType                String
+//   branch                     String
+//   ifsc                       String
+//   pfNumber                   String
+//   uanNumber                  String
+//   pensionNumber              String
+//   motherName                 String
+//   fatherName                 String
+//   spouseName                 String
+//   children                   Json
+// }
+
+// model FaccultyEducation {
+//   id                  Int     @id @default(autoincrement())
+//   facultyId           String
+//   Program             String?
+//   usnSsn              String?
+//   schoolCollege       String?
+//   specialization      String?
+//   mediumOfInstruction String?
+//   passClass           String?
+// }
+
+// model FacultyAcademicDetails {
+//   id                   Int                         @id @default(autoincrement())
+//   employeeId           String                      @unique
+//   facultyId            String                      @unique
+//   qualification        String
+//   department           String
+//   level                String
+//   designation          String
+//   responsibilities     AddtionalResponsibility[]
+//   awardsandrecognition AwardAndRecognition[]
+//   eventsAttended       EventAttended[]
+//   EventOrganized       EventOrganized[]
+//   extracurriculars     Extracurricular[]
+//   industryExperience   IndustryExperience[]
+//   invitedTalks         InvitedTalk[]
+//   outreachActivities   OutreachActivity[]
+//   previousExperience   PreviousTeachingExperience?
+//   researchExperience   ResearchExperience[]
+//   specializations      Specialization[]
+// }
+
+// model PreviousTeachingExperience {
+//   id            Int                    @id @default(autoincrement())
+//   facultyId     String                 @unique
+//   instituteName String
+//   fromDate      DateTime
+//   toDate        DateTime
+//   faculty       FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "PreviousTeachingExperience_facultyId_fkey")
+// }
+
+// model IndustryExperience {
+//   id           Int                    @id @default(autoincrement())
+//   organization String
+//   designation  String
+//   fromDate     DateTime
+//   toDate       DateTime
+//   facultyId    String
+//   faculty      FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "IndustryExperience_facultyId_fkey")
+// }
+
+// model ResearchExperience {
+//   id           Int                    @id @default(autoincrement())
+//   organization String
+//   designation  String
+//   fromDate     DateTime
+//   toDate       DateTime
+//   facultyId    String
+//   faculty      FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "ResearchExperience_facultyId_fkey")
+// }
+
+// model Specialization {
+//   id             Int                    @id @default(autoincrement())
+//   subjectsTaught String
+//   program        String
+//   numberOfTimes  Int
+//   facultyId      String
+//   faculty        FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "Specialization_facultyId_fkey")
+// }
+
+// model EventAttended {
+//   id             Int                    @id @default(autoincrement())
+//   fromDate       DateTime
+//   toDate         DateTime
+//   organizer      String
+//   venue          String
+//   sponsor        String?
+//   targetAudience String?
+//   facultyId      String
+//   nameofevent    String
+//   typeofevent    String
+//   faculty        FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "EventAttended_facultyId_fkey")
+// }
+
+// model EventOrganized {
+//   id             Int                    @id @default(autoincrement())
+//   typeofevent    String
+//   nameofevent    String
+//   fromDate       DateTime
+//   toDate         DateTime
+//   organizer      String
+//   venue          String
+//   sponsor        String?
+//   targetAudience String?
+//   facultyId      String
+//   faculty        FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "EventAttended_facultyId_fkey")
+// }
+
+// model InvitedTalk {
+//   id             Int                    @id @default(autoincrement())
+//   eventType      String
+//   fromDate       DateTime
+//   toDate         DateTime
+//   organizer      String
+//   venue          String
+//   targetAudience String
+//   facultyId      String
+//   topic          String
+//   faculty        FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "InvitedTalk_facultyId_fkey")
+// }
+
+// model AddtionalResponsibility {
+//   id                       Int                    @id @default(autoincrement())
+//   additionalResponsibility String
+//   level                    String
+//   fromDate                 DateTime
+//   toDate                   DateTime
+//   facultyId                String
+//   faculty                  FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "Responsibility_facultyId_fkey")
+// }
+
+// model Extracurricular {
+//   id          Int                    @id @default(autoincrement())
+//   eventType   String
+//   eventTitle  String
+//   fromDate    DateTime
+//   toDate      DateTime
+//   organizer   String
+//   level       String
+//   achievement String
+//   facultyId   String
+//   faculty     FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "Extracurricular_facultyId_fkey")
+// }
+
+// model OutreachActivity {
+//   id        Int                    @id @default(autoincrement())
+//   activity  String
+//   role      String
+//   fromDate  DateTime
+//   toDate    DateTime
+//   place     String
+//   facultyId String
+//   faculty   FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "OutreachActivity_facultyId_fkey")
+// }
+
+// model AwardAndRecognition {
+//   id                     Int                    @id @default(autoincrement())
+//   recognitionReceived    String
+//   awardReceived          String
+//   facultyId              String
+//   FacultyAcademicDetails FacultyAcademicDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "Award_facultyId_fkey")
+// }
+
+// model FacultyResearchDetails {
+//   id                   Int                    @id @default(autoincrement())
+//   facultyId            String                 @unique
+//   orcidId              String?                @unique
+//   googleScholarId      String?                @unique
+//   scopusId             String?                @unique
+//   publonsId            String?                @unique
+//   researchId           String?                @unique
+//   conferenceandjournal ConferenceAndJournal[]
+//   consultancy          Consultancy[]
+//   patent               Patent[]
+//   publications         Publication[]
+//   researchGrant        ResearchGrant[]
+// }
+
+// model Patent {
+//   id              String                 @id @default(uuid())
+//   facultyId       String
+//   areaOfResearch  String
+//   patentPeriod    String
+//   grantedYear     Int
+//   author1         String
+//   author2         String?
+//   author3         String?
+//   author4         String?
+//   author5         String?
+//   author6         String?
+//   facultyResearch FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "Patent_facultyId_fkey")
+// }
+
+// model Publication {
+//   id              Int                    @id @default(autoincrement())
+//   publicationType String
+//   name            String
+//   volume          String?
+//   pageNumber      String?
+//   doi             String?
+//   impactFactor    Float?
+//   facultyId       String
+//   faculty         FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "Publication_facultyId_fkey")
+// }
+
+// model ConferenceAndJournal {
+//   id                Int                    @id @default(autoincrement())
+//   facultyId         String
+//   role              String
+//   title             String
+//   journalName       String
+//   issueNo           String?
+//   volume            String?
+//   yearOfPublication Int
+//   pageNo            String?
+//   author1           String
+//   author2           String?
+//   author3           String?
+//   author4           String?
+//   publishedUnder    String?
+//   impactFactor      Float?
+//   quartile          String?
+//   sponsor           String?
+//   venue             String
+//   fromDate          DateTime
+//   toDate            DateTime
+//   facultyResearch   FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "ConferenceAndJournal_facultyId_fkey")
+// }
+
+// model ResearchGrant {
+//   id                      Int                    @id @default(autoincrement())
+//   facultyId               String
+//   facultyResearchId       String
+//   name                    String
+//   sanctionedDate          DateTime
+//   projectPeriod           String
+//   amountSanctioned        Float
+//   fundedBy                String
+//   principalInvestigator   String
+//   coPrincipalInvestigator String?
+//   phdAwarded              Boolean
+//   status                  String
+//   facultyResearch         FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "ResearchGrant_facultyId_fkey")
+// }
+
+// model Consultancy {
+//   id                      String                 @id @default(uuid())
+//   facultyId               String
+//   facultyResearchId       String
+//   faculty1                String
+//   faculty2                String
+//   faculty3                String
+//   sanctionedDate          DateTime
+//   projectPeriod           String
+//   amount                  Float
+//   principalInvestigator   String
+//   coPrincipalInvestigator String?
+//   status                  String
+//   facultyResearch         FacultyResearchDetails @relation(fields: [facultyId], references: [facultyId])
+
+//   @@index([facultyId], map: "Consultancy_facultyId_fkey")
+// }
+
+// model User {
+//   id        Int    @id @default(autoincrement())
+//   facultyId String @unique
+//   password  String @unique
+//   role      String @default("faculty")
+//   username  String
+// }
+
+// model Branch {
+//   id         Int    @id @default(autoincrement())
+//   branchName String
+//   branchCode String
+// }
+
